@@ -1,0 +1,19 @@
+{
+    "name": "kike/zoo",
+    "description": "Sistema de Gestión Académica - Tecnología Web II",
+    "type": "project",
+    "require": {
+        "php": "^8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "kike",
+            "email": "kike@gmail.com"
+        }
+    ]
+}
