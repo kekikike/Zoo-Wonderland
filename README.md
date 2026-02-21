@@ -25,6 +25,7 @@ Sistema desarrollado como proyecto del curso Tecnología Web II
 |   ├── comprar.php
 |   ├── historial.php
 |   ├── reservar.php
+|   ├── register.php 
 │   └── login.php
 ├── src/
 │   ├── enums/
