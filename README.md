@@ -19,20 +19,31 @@ Sistema desarrollado como proyecto del curso Tecnología Web II
 ## Estructura del Proyecto
 /
 ├── config/
+|   └── constants.php
 ├── public/
 │   ├── index.php
+|   ├── comprar.php
+|   ├── historial.php
+|   ├── reservar.php
 │   └── login.php
 ├── src/
 │   ├── enums/
 │   ├── models/
-│   │   ├── Login.php
-│   │   ├── Registro.php
-│   │   ├── Comprar.php
-│   │   └── Historial.php
+│   │   ├── animal.php
+│   │   ├── area.php
+│   │   ├── compra.php
+|   |   ├── recorrido.php
+|   |   ├── reserva.php
+|   |   ├── ticket.php
+│   │   └── usuarios.php
 │   ├── Repositories/
-│   │   ├── Users.php
-│   │   ├── Compras.php
-│   │   └── Historial.php
+│   │   ├── AnimalRepository.php
+|   |   ├── AreaRepository.php
+|   |   ├── CompraRepository.php
+|   |   ├── RecorridoRepository.php
+|   |   ├── ReservaRepository.php
+│   │   ├── TicketRepository.php
+│   │   └── UsuarioRepository.php
 │   ├── Services/
 │   └── Utils/
 ├── vendor/
