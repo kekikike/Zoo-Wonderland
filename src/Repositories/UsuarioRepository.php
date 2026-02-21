@@ -154,4 +154,9 @@ class UsuarioRepository
             );
         });
     }
+
+    public function add($usuario): void
+    {
+        $this->usuarios[$usuario->getId()] = $usuario;
+    }
 }
