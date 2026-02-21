@@ -1,6 +1,6 @@
 {
-    "name": "kike/zoo",
-    "description": "Sistema de Gestión Académica - Tecnología Web II",
+    "name": "antropomorfos/ZooWonderland",
+    "description": "Sistema de Gestión de Zoologico - Tecnología Web II",
     "type": "project",
     "require": {
         "php": "^8.2"
@@ -12,8 +12,8 @@
     },
     "authors": [
         {
-            "name": "kike",
-            "email": "kike@gmail.com"
+            "name": "antropomorfos",
+            "email": "antropomorfos@gmail.com"
         }
     ]
 }
