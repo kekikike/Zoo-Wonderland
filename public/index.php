@@ -12,6 +12,7 @@ require_once SRC_PATH . '/Models/Recorrido.php';
 
 use App\Services\Auth;
 use App\Repositories\RecorridoRepository;
+use App\Models\Cliente;
 
 $recorridoRepo = new RecorridoRepository();
 
@@ -269,6 +270,10 @@ $isLoggedIn = Auth::check();
             <li><a href="#inicio">Inicio</a></li>
             <li><a href="#nosotros">Nosotros</a></li>
             <li><a href="#visitanos">Visítanos</a></li>
+            <?php if ($isLoggedIn && Auth::user() instanceof \App\Models\Cliente): ?>
+                <li><a href="comprar.php">Comprar</a></li>
+                <li><a href="historial.php">Historial</a></li>
+            <?php endif; ?>
         </ul>
         <div class="auth-links">
             <?php if ($isLoggedIn): ?>

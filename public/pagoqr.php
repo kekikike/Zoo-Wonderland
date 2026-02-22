@@ -7,12 +7,14 @@ session_start();
 require_once __DIR__ . '/../config/constants.php';
 require_once SRC_PATH . '/Services/autoload_session.php';
 require_once SRC_PATH . '/Services/Auth.php';
-require_once SRC_PATH . '/Repositories/CompraRepository.php';
+require_once SRC_PATH . '/Services/CompraService.php';
 require_once SRC_PATH . '/Models/Cliente.php';
+require_once SRC_PATH . '/Repositories/CompraRepository.php';
 
 use App\Services\Auth;
-use App\Repositories\CompraRepository;
+use App\Services\CompraService;
 use App\Models\Cliente;
+use App\Repositories\CompraRepository;
 
 if (!Auth::check()) {
     header('Location: login.php');
@@ -25,8 +27,21 @@ if (!$usuario instanceof Cliente) {
     exit;
 }
 
+$compraService = new CompraService();
 $compraRepo = new CompraRepository();
-$compras = $compraRepo->findByCliente($usuario->getId());
+
+$compraId = (int)($_SESSION['ultima_compra_id'] ?? 0);
+$compra = $compraRepo->findById($compraId);
+
+error_log("En pagoqr.php: compraId=$compraId, compra encontrada=" . ($compra ? 'si' : 'no'));
+
+if (!$compra) {
+    error_log("No se encontró compra, redirigiendo a comprar.php");
+    header('Location: comprar.php');
+    exit;
+}
+
+$pdfContent = $compraService->generarComprobante($compra);
 
 ?>
 
@@ -35,7 +50,7 @@ $compras = $compraRepo->findByCliente($usuario->getId());
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial de Compras - <?= APP_NAME ?></title>
+    <title>Pago QR - <?= APP_NAME ?></title>
     <style>
         :root {
             --color-primary:    #a3712a;
@@ -138,22 +153,41 @@ $compras = $compraRepo->findByCliente($usuario->getId());
             text-align: center;
         }
 
-        .compra {
+        .pago-section {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+
+        .qr-part {
+            flex: 1;
+            text-align: center;
+        }
+
+        .comprobante-part {
+            flex: 2;
+        }
+
+        .qr-part img {
+            width: 200px;
+            height: 200px;
             border: 1px solid #ddd;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 4px;
+            border-radius: 8px;
         }
 
-        .compra h3 {
-            margin-top: 0;
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0.5rem;
+            transition: all 0.2s;
         }
 
-        .ticket {
-            background: #f9f9f9;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 4px;
+        .btn-comprar {
+            background: var(--color-info);
+            color: white;
         }
 
         footer {
@@ -166,6 +200,7 @@ $compras = $compraRepo->findByCliente($usuario->getId());
 
         @media (max-width: 768px) {
             .nav-links { gap: 1.2rem; font-size: 0.95rem; }
+            .pago-section { flex-direction: column; }
         }
     </style>
 </head>
@@ -179,6 +214,7 @@ $compras = $compraRepo->findByCliente($usuario->getId());
             <li><a href="index.php#nosotros">Nosotros</a></li>
             <li><a href="index.php#visitanos">Visítanos</a></li>
             <li><a href="comprar.php">Comprar</a></li>
+            <li><a href="historial.php">Historial</a></li>
         </ul>
         <div class="auth-links">
             <?php if (Auth::check()): ?>
@@ -194,25 +230,22 @@ $compras = $compraRepo->findByCliente($usuario->getId());
 
 <main>
     <div class="container">
-        <h1>Historial de Compras</h1>
+        <h1>Pago y Comprobante</h1>
 
-        <?php if (empty($compras)): ?>
-            <p>No tienes compras registradas.</p>
-        <?php else: ?>
-            <?php foreach ($compras as $compra): ?>
-                <div class="compra">
-                    <h3>Compra #<?= $compra->getId() ?> - Total: Bs. <?= $compra->getMonto() ?></h3>
-                    <p>Fecha: <?= $compra->getFecha() ?> | Hora: <?= $compra->getHora() ?></p>
-                    <h4>Tickets:</h4>
-                    <?php foreach ($compra->getTickets() as $ticket): ?>
-                        <div class="ticket">
-                            <p>Ticket ID: <?= $ticket->getId() ?> | Recorrido: <?= $ticket->getRecorrido()->getNombre() ?> | Fecha: <?= $ticket->getFecha() ?> | Hora: <?= $ticket->getHora() ?></p>
-                            <img src="<?= $ticket->getCodigoQR() ?>" alt="QR Code" style="width: 100px; height: 100px;" />
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
+        <div class="pago-section">
+            <div class="qr-part">
+                <h2>Código QR para Pago</h2>
+                <img src="./img/qr.jpeg" alt="QR de Pago" />
+                <p>Escanee este QR para realizar el pago.</p>
+            </div>
+
+            <div class="comprobante-part">
+                <h2>Comprobante de Compra</h2>
+                <embed src="data:application/pdf;base64,<?= base64_encode($pdfContent) ?>" width="100%" height="600px" type="application/pdf" />
+                <br>
+                <a href="data:application/pdf;base64,<?= base64_encode($pdfContent) ?>" download="comprobante_<?= $compra->getId() ?>.pdf" class="btn btn-comprar">Descargar Comprobante</a>
+            </div>
+        </div>
     </div>
 </main>
 

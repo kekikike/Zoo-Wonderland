@@ -12,21 +12,19 @@ use App\Models\Recorrido;
  */
 class CompraRepository
 {
-    private array $compras = [];
+    private array $compras;
     private int $nextId = 1;
 
     public function __construct()
     {
-        $this->seedData();
-    }
-
-    /**
-     * Datos de prueba
-     */
-    private function seedData(): void
-    {
-        // Datos simulados básicos (sin dependencias reales)
-        $this->compras = [];
+        if (!isset($_SESSION['compras'])) {
+            $_SESSION['compras'] = [];
+        }
+        $this->compras = &$_SESSION['compras'];
+        if (!isset($_SESSION['compra_next_id'])) {
+            $_SESSION['compra_next_id'] = 1;
+        }
+        $this->nextId = $_SESSION['compra_next_id'];
     }
 
     /**
@@ -65,15 +63,13 @@ class CompraRepository
     }
 
     /**
-     * Elimina compra
+     * Obtiene el siguiente ID
      */
-    public function delete(int $id): bool
+    public function getNextId(): int
     {
-        if (!isset($this->compras[$id])) {
-            return false;
-        }
-
-        unset($this->compras[$id]);
-        return true;
+        $id = $this->nextId;
+        $this->nextId++;
+        $_SESSION['compra_next_id'] = $this->nextId;
+        return $id;
     }
 }
