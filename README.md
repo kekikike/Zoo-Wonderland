@@ -21,22 +21,27 @@ Sistema desarrollado como proyecto del curso Tecnología Web II
 ├── config/
 |   └── constants.php
 ├── public/
+|   ├── img/
 │   ├── index.php
 |   ├── comprar.php
 |   ├── historial.php
 |   ├── reservar.php
-|   ├── register.php 
+|   ├── registrar.php 
+|   ├── logout.php
 │   └── login.php
 ├── src/
 │   ├── enums/
 │   ├── models/
+|   |   ├── Administrador.php
 │   │   ├── animal.php
 │   │   ├── area.php
+|   |   ├── Cliente.php
+|   |   ├── Guia.php
 │   │   ├── compra.php
 |   |   ├── recorrido.php
 |   |   ├── reserva.php
 |   |   ├── ticket.php
-│   │   └── usuarios.php
+│   │   └── usuario.php
 │   ├── Repositories/
 │   │   ├── AnimalRepository.php
 |   |   ├── AreaRepository.php
@@ -47,6 +52,7 @@ Sistema desarrollado como proyecto del curso Tecnología Web II
 │   │   └── UsuarioRepository.php
 │   ├── Services/
 │   │   |── Auth.php
+|   |   ├── autoload_session.php
 │   │   └── Register.php
 │   └── Utils/
 ├── vendor/

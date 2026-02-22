@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Repositories\UsuarioRepository;
+use Exception;
 
 class Register
 {
@@ -16,58 +17,66 @@ class Register
 
     public function create(array $data): array
     {
-        $required = [
-            'nombre1',
-            'apellido1',
-            'correo',
-            'telefono',
-            'username',
-            'password',
-            'nit'
-        ];
+        try {
 
-        foreach ($required as $field) {
-            if (empty(trim($data[$field] ?? ''))) {
-                return [
-                    'success' => false,
-                    'message' => 'Todos los campos obligatorios deben completarse.'
-                ];
+            $required = [
+                'nombre1',
+                'apellido1',
+                'correo',
+                'telefono',
+                'username',
+                'password',
+                'nit'
+            ];
+
+            foreach ($required as $field) {
+                if (empty(trim($data[$field] ?? ''))) {
+                    throw new Exception('Todos los campos obligatorios deben completarse.');
+                }
             }
-        }
 
-        if (preg_match('/\s/', $data['username'])) {
+            if (!filter_var($data['correo'], FILTER_VALIDATE_EMAIL)) {
+                throw new Exception('El correo electrónico no es válido.');
+            }
+
+            if (preg_match('/\s/', $data['username'])) {
+                throw new Exception('El nombre de usuario no puede contener espacios.');
+            }
+
+            if ($this->repository->findByUsername($data['username'])) {
+                throw new Exception('El nombre de usuario ya está en uso.');
+            }
+
+            $cliente = new \App\Models\Cliente(
+                rand(1000, 9999),
+                $data['nombre1'],
+                $data['nombre2'] ?? '',
+                $data['apellido1'],
+                $data['apellido2'] ?? '',
+                $data['correo'],
+                $data['telefono'],
+                $data['username'],
+                password_hash($data['password'], PASSWORD_DEFAULT),
+                (int)$data['nit'],
+                'Normal'
+            );
+
+            $this->repository->add($cliente);
+
+            return [
+                'success' => true,
+                'message' => 'Cliente registrado correctamente.'
+            ];
+
+        } catch (Exception $e) {
+
             return [
                 'success' => false,
-                'message' => 'El nombre de usuario no puede contener espacios.'
+                'message' => $e->getMessage()
             ];
+
+        } finally {
+            echo "Intento de registro con username: " . htmlspecialchars($data['username'] ?? '') . " - Resultado: " . ($e->getMessage() ?? 'Éxito') . "\n";
         }
-
-        if ($this->repository->findByUsername($data['username'])) {
-            return [
-                'success' => false,
-                'message' => 'El nombre de usuario ya está en uso.'
-            ];
-        }
-
-        $cliente = new \App\Models\Cliente(
-            rand(1000, 9999),
-            $data['nombre1'],
-            $data['nombre2'] ?? '',
-            $data['apellido1'],
-            $data['apellido2'] ?? '',
-            $data['correo'],
-            $data['telefono'],
-            $data['username'],
-            $data['password'],
-            (int)$data['nit'],
-            'Normal'
-        );
-
-        $this->repository->add($cliente);
-
-        return [
-            'success' => true,
-            'message' => 'Cliente registrado correctamente.'
-        ];
     }
 }
