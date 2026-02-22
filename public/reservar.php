@@ -114,10 +114,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
 
         if ($resultado) {
-            $_SESSION['ultima_reserva_codigo'] = $resultado['codigo_confirmacion'];
-            $paso        = 'confirmacion';
-            $tipoMensaje = 'exito';
-            $mensaje     = '¡Reserva registrada exitosamente!';
+            // Redirigir a la página de QR + PDF (igual que comprar.php → pagoqr.php)
+            header('Location: pagoqr_reserva.php');
+            exit;
         } else {
             $mensaje     = 'Hubo un error al procesar la reserva. Por favor intente nuevamente.';
             $tipoMensaje = 'error';
@@ -575,129 +574,14 @@ $fechaMin = date('Y-m-d', strtotime('+3 days'));
 <!-- ===== MAIN ===== -->
 <main>
 
-<?php if ($paso === 'confirmacion' && $resultado): ?>
-    <!-- ======================================================= -->
-    <!-- PANTALLA DE CONFIRMACIÓN                                  -->
-    <!-- ======================================================= -->
-    <?php
-        $reserva  = $resultado['reserva'];
-        $recorrido = $resultado['recorrido'];
-        $tipoLabel = $tiposInstitucion[$resultado['tipo_institucion']] ?? $resultado['tipo_institucion'];
-    ?>
-    <div class="confirmacion-card">
-        <div class="conf-header">
-            <div class="icon">🎉</div>
-            <h2>¡Reserva Confirmada!</h2>
-            <p>Tu solicitud de tour grupal ha sido registrada correctamente.</p>
-        </div>
 
-        <div class="conf-body">
+<!-- ===== CONTENIDO PRINCIPAL: SIDEBAR + FORMULARIO ===== -->
 
-            <div class="conf-code">
-                <small>Código de confirmación</small>
-                <strong><?= htmlspecialchars($resultado['codigo_confirmacion']) ?></strong>
-            </div>
-
-            <div class="conf-grid">
-
-                <div class="conf-section">
-                    <h4>📋 Datos de la Institución</h4>
-                    <div class="conf-row">
-                        <span>Institución:</span>
-                        <span><?= htmlspecialchars($reserva->getInstitucion()) ?></span>
-                    </div>
-                    <div class="conf-row">
-                        <span>Tipo:</span>
-                        <span><?= htmlspecialchars($tipoLabel) ?></span>
-                    </div>
-                    <div class="conf-row">
-                        <span>N° de personas:</span>
-                        <span><?= $reserva->getCupos() ?> personas</span>
-                    </div>
-                </div>
-
-                <div class="conf-section">
-                    <h4>👤 Contacto</h4>
-                    <div class="conf-row">
-                        <span>Nombre:</span>
-                        <span><?= htmlspecialchars($resultado['contacto_nombre']) ?></span>
-                    </div>
-                    <div class="conf-row">
-                        <span>Teléfono:</span>
-                        <span><?= htmlspecialchars($resultado['contacto_telefono']) ?></span>
-                    </div>
-                    <div class="conf-row">
-                        <span>Email:</span>
-                        <span><?= htmlspecialchars($resultado['contacto_email']) ?></span>
-                    </div>
-                </div>
-
-                <div class="conf-section">
-                    <h4>🗺️ Tour Seleccionado</h4>
-                    <div class="conf-row">
-                        <span>Recorrido:</span>
-                        <span><?= htmlspecialchars($recorrido->getNombre()) ?></span>
-                    </div>
-                    <div class="conf-row">
-                        <span>Tipo:</span>
-                        <span><?= htmlspecialchars($recorrido->getTipo()) ?></span>
-                    </div>
-                    <div class="conf-row">
-                        <span>Duración:</span>
-                        <span><?= $recorrido->getDuracion() ?> min</span>
-                    </div>
-                    <div class="conf-row">
-                        <span>Precio unitario:</span>
-                        <span>Bs. <?= number_format($recorrido->getPrecio(), 2) ?></span>
-                    </div>
-                </div>
-
-                <div class="conf-section">
-                    <h4>📅 Fecha y Hora</h4>
-                    <div class="conf-row">
-                        <span>Fecha:</span>
-                        <span><?= htmlspecialchars(date('d/m/Y', strtotime($reserva->getFecha()))) ?></span>
-                    </div>
-                    <div class="conf-row">
-                        <span>Hora:</span>
-                        <span><?= htmlspecialchars($reserva->getHora()) ?></span>
-                    </div>
-                    <?php if (!empty($resultado['observaciones'])): ?>
-                    <div class="conf-row">
-                        <span>Observaciones:</span>
-                        <span><?= htmlspecialchars($resultado['observaciones']) ?></span>
-                    </div>
-                    <?php endif; ?>
-                </div>
-
-            </div>
-
-            <div class="conf-total">
-                <span>💰 Total estimado:</span>
-                <span>Bs. <?= number_format($resultado['monto_total'], 2) ?></span>
-            </div>
-
-            <div class="conf-notice">
-                ℹ️ <strong>Nota:</strong> Recibirás una confirmación por parte del zoológico a través del correo
-                <strong><?= htmlspecialchars($resultado['contacto_email']) ?></strong>
-                en los próximos 2 días hábiles para coordinar el pago y los detalles finales del tour.
-                Guarda tu código de confirmación: <strong><?= htmlspecialchars($resultado['codigo_confirmacion']) ?></strong>.
-            </div>
-
-            <div class="conf-actions">
-                <a href="index.php" class="btn-action btn-primary">🏠 Volver al Inicio</a>
-                <a href="reservar.php" class="btn-action btn-outline">📋 Hacer otra reserva</a>
-                <a href="comprar.php" class="btn-action btn-outline">🎟️ Comprar entradas</a>
-            </div>
-
-        </div>
-    </div>
-
-<?php else: ?>
     <!-- ======================================================= -->
     <!-- SIDEBAR                                                   -->
     <!-- ======================================================= -->
     <aside class="sidebar">
+
 
         <div class="info-card">
             <h3>📋 Requisitos para Tour Grupal</h3>
@@ -951,10 +835,9 @@ $fechaMin = date('Y-m-d', strtotime('+3 days'));
             </button>
 
         </form>
-    </div>
-<?php endif; ?>
 
 </main>
+
 
 <footer>
     <p>&copy; <?= date('Y') ?> <?= APP_NAME ?> — Todos los derechos reservados</p>

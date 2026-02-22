@@ -67,6 +67,44 @@ class ReservaRepository
     }
 
     /**
+     * Obtiene todas las reservas del usuario en sesión.
+     * Como la sesión es por usuario, todas le pertenecen.
+     * El parámetro $clienteId se acepta por consistencia con CompraRepository.
+     */
+    public function findByCliente(int $clienteId): array
+    {
+        return array_values($this->getStore());
+    }
+
+    /**
+     * Retorna todas las reservas junto con sus datos extra (contacto, monto, código).
+     * Los datos extra se almacenan en $_SESSION['zoo_reservas_extras'].
+     */
+    public function findAllWithExtras(): array
+    {
+        $reservas = array_values($this->getStore());
+        $extras   = $_SESSION['zoo_reservas_extras'] ?? [];
+
+        return array_map(function (Reserva $r) use ($extras) {
+            return [
+                'reserva' => $r,
+                'extras'  => $extras[$r->getId()] ?? [],
+            ];
+        }, $reservas);
+    }
+
+    /**
+     * Guarda los datos extra de una reserva (contacto, monto, codigo).
+     */
+    public function saveExtras(int $reservaId, array $datos): void
+    {
+        if (!isset($_SESSION['zoo_reservas_extras'])) {
+            $_SESSION['zoo_reservas_extras'] = [];
+        }
+        $_SESSION['zoo_reservas_extras'][$reservaId] = $datos;
+    }
+
+    /**
      * Agrega una reserva al store de sesión.
      */
     public function add(Reserva $reserva): void
