@@ -19,9 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $resultado = $register->create($_POST);
 
     if ($resultado['success']) {
-        $success = $resultado['message'];
+        $_SESSION['success'] = $resultado['message'];
+        header('Location: index.php');
+        exit;
     } else {
         $error = $resultado['message'];
+        
     }
 }
 ?>
