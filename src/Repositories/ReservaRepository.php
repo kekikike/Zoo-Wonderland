@@ -4,73 +4,85 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Models\Reserva;
+use App\Models\Recorrido;
 
 /**
- * Repositorio de reservas (simulado en memoria)
+ * Repositorio de reservas grupales — persistencia en sesión (HU-04)
  */
 class ReservaRepository
 {
-    private array $reservas = [];
-    private int $nextId = 1;
+    private const SESSION_KEY = 'zoo_reservas';
+    private const NEXT_ID_KEY = 'zoo_reservas_next_id';
 
-    public function __construct()
+    // ------------------------------------------------------------------
+    // Persistencia en $_SESSION
+    // ------------------------------------------------------------------
+
+    private function &getStore(): array
     {
-        $this->seedData();
+        if (!isset($_SESSION[self::SESSION_KEY])) {
+            $_SESSION[self::SESSION_KEY] = [];
+        }
+        return $_SESSION[self::SESSION_KEY];
     }
 
-    /**
-     * Datos de prueba
-     */
-    private function seedData(): void
+    public function getNextId(): int
     {
-        $this->reservas = [];
+        if (!isset($_SESSION[self::NEXT_ID_KEY])) {
+            $_SESSION[self::NEXT_ID_KEY] = 1;
+        }
+        return $_SESSION[self::NEXT_ID_KEY]++;
     }
 
+    // ------------------------------------------------------------------
+    // CRUD
+    // ------------------------------------------------------------------
+
     /**
-     * Obtiene todas las reservas
+     * Obtiene todas las reservas (todas las sesiones del cliente).
      */
     public function findAll(): array
     {
-        return array_values($this->reservas);
+        return array_values($this->getStore());
     }
 
     /**
-     * Busca por ID
+     * Busca una reserva por su ID.
      */
     public function findById(int $id): ?Reserva
     {
-        return $this->reservas[$id] ?? null;
+        $store = $this->getStore();
+        return $store[$id] ?? null;
     }
 
     /**
-     * Busca por institución
+     * Filtra reservas por nombre de institución (búsqueda insensible a mayúsculas).
      */
     public function findByInstitucion(string $institucion): array
     {
         return array_filter(
-            $this->reservas,
+            $this->getStore(),
             fn($r) => strtolower($r->getInstitucion()) === strtolower($institucion)
         );
     }
 
     /**
-     * Agrega reserva
+     * Agrega una reserva al store de sesión.
      */
     public function add(Reserva $reserva): void
     {
-        $this->reservas[$reserva->getId()] = $reserva;
+        $_SESSION[self::SESSION_KEY][$reserva->getId()] = $reserva;
     }
 
     /**
-     * Elimina reserva
+     * Elimina una reserva por ID.
      */
     public function delete(int $id): bool
     {
-        if (!isset($this->reservas[$id])) {
+        if (!isset($_SESSION[self::SESSION_KEY][$id])) {
             return false;
         }
-
-        unset($this->reservas[$id]);
+        unset($_SESSION[self::SESSION_KEY][$id]);
         return true;
     }
 }

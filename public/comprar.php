@@ -288,6 +288,7 @@ if (isset($_GET['descargar'])) {
             <li><a href="index.php#inicio">Inicio</a></li>
             <li><a href="index.php#nosotros">Nosotros</a></li>
             <li><a href="index.php#visitanos">Visítanos</a></li>
+            <li><a href="reservar.php">Tours Grupales</a></li>
             <li><a href="historial.php">Historial</a></li>
         </ul>
         <div class="auth-links">

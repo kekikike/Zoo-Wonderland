@@ -271,7 +271,8 @@ $isLoggedIn = Auth::check();
             <li><a href="#nosotros">Nosotros</a></li>
             <li><a href="#visitanos">Visítanos</a></li>
             <?php if ($isLoggedIn && Auth::user() instanceof \App\Models\Cliente): ?>
-                <li><a href="comprar.php">Comprar</a></li>
+                <li><a href="comprar.php">Comprar Entradas</a></li>
+                <li><a href="reservar.php">Tours Grupales</a></li>
                 <li><a href="historial.php">Historial</a></li>
             <?php endif; ?>
         </ul>

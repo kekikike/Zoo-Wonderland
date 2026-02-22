@@ -178,7 +178,8 @@ $compras = $compraRepo->findByCliente($usuario->getId());
             <li><a href="index.php#inicio">Inicio</a></li>
             <li><a href="index.php#nosotros">Nosotros</a></li>
             <li><a href="index.php#visitanos">Visítanos</a></li>
-            <li><a href="comprar.php">Comprar</a></li>
+            <li><a href="comprar.php">Comprar Entradas</a></li>
+            <li><a href="reservar.php">Tours Grupales</a></li>
         </ul>
         <div class="auth-links">
             <?php if (Auth::check()): ?>
