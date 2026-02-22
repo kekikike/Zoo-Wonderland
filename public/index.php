@@ -276,7 +276,7 @@ $isLoggedIn = Auth::check();
                 <a href="logout.php" style="margin-left:1.5rem;color:#ffe2a0;">Cerrar sesión</a>
             <?php else: ?>
                 <a href="login.php" class="btn login-btn">Iniciar sesión</a>
-                <a href="register.php" class="btn register-btn">Registrarse</a>
+                <a href="registrar.php" class="btn register-btn">Registrarse</a>
             <?php endif; ?>
         </div>
     </nav>
