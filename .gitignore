@@ -1,5 +1,5 @@
 # Dependencias
-/vendor/
+
 
 # Configuración local
 .env
