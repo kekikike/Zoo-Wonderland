@@ -28,6 +28,42 @@ if (!$usuario instanceof Cliente) {
 $compraRepo = new CompraRepository();
 $compras = $compraRepo->findByCliente($usuario->getId());
 
+// filtro por fecha
+$fechaInicio = $_GET['fechaInicio'] ?? '';
+$fechaFin = $_GET['fechaFin'] ?? '';
+$errorFiltro = ''; 
+
+try {
+    if (!empty($_GET['fechaInicio']) && !empty($_GET['fechaFin'])) {
+        $fechaInicio = $_GET['fechaInicio'];
+        $fechaFin = $_GET['fechaFin'];
+
+        $inicio = new DateTime($fechaInicio);
+        $fin = new DateTime($fechaFin);
+        $hoy = new DateTime('today');
+
+        // Validaciones
+        if ($inicio > $hoy) {
+            throw new Exception("La fecha de inicio no puede ser futura.");
+        }
+        if ($fin > $hoy) {
+            throw new Exception("La fecha de fin no puede ser futura.");
+        }
+        if ($inicio > $fin) {
+            throw new Exception("La fecha inicial no puede ser mayor a la final.");
+        }
+
+        // Filtrar compras por rango de fechas
+        $compras = array_filter($compras, function($compra) use ($inicio, $fin) {
+            $fechaCompra = new DateTime($compra->getFecha());
+            return $fechaCompra >= $inicio && $fechaCompra <= $fin;
+        });
+    }
+} catch (Exception $e) {
+    $errorFiltro = $e->getMessage();
+}
+
+ 
 ?>
 
 <!DOCTYPE html>
@@ -164,6 +200,52 @@ $compras = $compraRepo->findByCliente($usuario->getId());
             margin-top: 4rem;
         }
 
+        .filtro-fechas {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap; 
+        }
+
+        .filtro-fechas label {
+            font-weight: bold;
+        }
+
+        .filtro-fechas input[type="date"] {
+            padding: 6px 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .filtro-fechas button {
+            padding: 6px 12px;
+            background-color: var(--color-light);
+            border: none;
+            border-radius: 4px;
+            color: var(--color-dark);
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .filtro-fechas button:hover {
+            background-color: var(--color-accent);
+            color: var(--color-dark);
+        }
+
+        .filtro-fechas .limpiar-filtro {
+            margin-left: 10px;
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .filtro-fechas .limpiar-filtro:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 768px) {
             .nav-links { gap: 1.2rem; font-size: 0.95rem; }
         }
@@ -196,6 +278,21 @@ $compras = $compraRepo->findByCliente($usuario->getId());
 <main>
     <div class="container">
         <h1>Historial de Compras</h1>
+
+        <!-- Filtro por fechas-->
+         <?php if(!empty($errorFiltro)): ?>
+            <p style="color:red; font-weight:bold; margin-bottom: 15px;"><?= htmlspecialchars($errorFiltro) ?></p>
+        <?php endif; ?>
+        <form method="get" class="filtro-fechas">
+            <label for="fechaInicio">Desde:</label>
+            <input type="date" name="fechaInicio" id="fechaInicio" value="<?= htmlspecialchars($fechaInicio ?? '') ?>" required>
+
+            <label for="fechaFin">Hasta:</label>
+            <input type="date" name="fechaFin" id="fechaFin" value="<?= htmlspecialchars($fechaFin ?? '') ?>" required>
+
+            <button type="submit">Filtrar</button>
+            <a href="historial.php" class="limpiar-filtro">Limpiar filtro</a>
+        </form>
 
         <?php if (empty($compras)): ?>
             <p>No tienes compras registradas.</p>
