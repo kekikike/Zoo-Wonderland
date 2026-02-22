@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Repositories\UsuarioRepository;
+use App\Models\Cliente;
 use Exception;
 
 class Register
@@ -17,6 +18,8 @@ class Register
 
     public function create(array $data): array
     {
+        $errorMessage = null;
+
         try {
 
             $required = [
@@ -47,7 +50,7 @@ class Register
                 throw new Exception('El nombre de usuario ya está en uso.');
             }
 
-            $cliente = new \App\Models\Cliente(
+            $cliente = new Cliente(
                 rand(1000, 9999),
                 $data['nombre1'],
                 $data['nombre2'] ?? '',
@@ -56,7 +59,7 @@ class Register
                 $data['correo'],
                 $data['telefono'],
                 $data['username'],
-                password_hash($data['password'], PASSWORD_DEFAULT),
+                $data['password'], // SIN doble hash
                 (int)$data['nit'],
                 'Normal'
             );
@@ -70,13 +73,20 @@ class Register
 
         } catch (Exception $e) {
 
+            $errorMessage = $e->getMessage();
+
             return [
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $errorMessage
             ];
 
         } finally {
-            echo "Intento de registro con username: " . htmlspecialchars($data['username'] ?? '') . " - Resultado: " . ($e->getMessage() ?? 'Éxito') . "\n";
+
+            echo "Intento de registro con username: "
+                . htmlspecialchars($data['username'] ?? '')
+                . " - Resultado: "
+                . ($errorMessage ?? 'Éxito')
+                . "<br>";
         }
     }
 }

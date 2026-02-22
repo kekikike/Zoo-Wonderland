@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
+
 require_once __DIR__ . '/../vendor/autoload.php';
+session_start();
 
 use App\Repositories\UsuarioRepository;
 use App\Services\Register;
@@ -101,14 +103,14 @@ function validarFormulario() {
 <body>
 
 <div class="container">
-    <h2>Registro Cliente - Zoo Wonderland</h2>
+    <h2>🦁 Registro Cliente <br><span>Zoo Wonderland</span></h2>
 
     <?php if ($error): ?>
-        <div class="error"><?= $error ?></div>
+        <div class="error"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
 
     <?php if ($success): ?>
-        <div class="success"><?= $success ?></div>
+        <div class="success"><?= htmlspecialchars($success) ?></div>
     <?php endif; ?>
 
     <form method="POST" onsubmit="return validarFormulario();">
@@ -121,8 +123,12 @@ function validarFormulario() {
         <input type="text" name="username" id="username" placeholder="Nombre de Usuario" required>
         <input type="password" name="password" id="password" placeholder="Contraseña" required>
         <input type="number" name="nit" placeholder="NIT" required>
-        <button type="submit">Registrar</button>
+        <button type="submit">Registrar 🐾</button>
     </form>
+
+    <div class="footer">
+        Bienvenido al reino salvaje 🐘🌿
+    </div>
 </div>
 
 </body>
