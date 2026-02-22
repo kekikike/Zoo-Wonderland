@@ -46,6 +46,8 @@ Sistema desarrollado como proyecto del curso Tecnología Web II
 │   │   ├── TicketRepository.php
 │   │   └── UsuarioRepository.php
 │   ├── Services/
+│   │   |── Auth.php
+│   │   └── Register.php
 │   └── Utils/
 ├── vendor/
 ├── .gitignore
