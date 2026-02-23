@@ -76,7 +76,7 @@ class Register
 
             // Crear el cliente
             $cliente = new Cliente(
-                rand(1000, 9999),                      // ID temporal / random (cámbialo si usas auto-increment)
+                rand(1000, 9999),                   
                 trim($data['nombre1']),
                 trim($data['nombre2'] ?? ''),
                 trim($data['apellido1']),
@@ -84,7 +84,7 @@ class Register
                 $data['correo'],
                 $data['telefono'],
                 $data['username'],
-                $data['password'],                      // ← aquí normalmente deberías hashear la contraseña
+                $data['password'],                      
                 (int)$data['nit'],
                 'Normal'
             );
