@@ -49,7 +49,6 @@ try {
         $hoy    = new DateTime('today');
 
         if ($inicio > $hoy) throw new Exception('La fecha de inicio no puede ser futura.');
-        if ($fin    > $hoy) throw new Exception('La fecha de fin no puede ser futura.');
         if ($inicio > $fin) throw new Exception('La fecha inicial no puede ser mayor a la final.');
 
         // Filtrar compras

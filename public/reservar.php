@@ -567,7 +567,7 @@ $fechaMin = date('Y-m-d', strtotime('+3 days'));
 
 <!-- ===== HERO ===== -->
 <div class="page-hero">
-    <h1>🦁 Tours Grupales</h1>
+    <h1>Tours Grupales</h1>
     <p>Reserva una visita especial para tu colegio, universidad u organización con guías especializados.</p>
 </div>
 
@@ -587,7 +587,7 @@ $fechaMin = date('Y-m-d', strtotime('+3 days'));
             <h3>📋 Requisitos para Tour Grupal</h3>
             <ul>
                 <li>Mínimo 10 personas por grupo</li>
-                <li>Máximo 200 personas por reserva</li>
+                <li>Máximo 50 personas por reserva</li>
                 <li>Reserva con 3 días de anticipación</li>
                 <li>Solo recorridos guiados disponibles</li>
                 <li>Horarios: 09:00 a 15:00</li>
@@ -884,11 +884,11 @@ $fechaMin = date('Y-m-d', strtotime('+3 days'));
             alert('El número mínimo de personas para un tour grupal es 10.');
             return;
         }
-        if (personas > 200) {
+        if (personas > 50) {
             e.preventDefault();
             inputPersonas.classList.add('has-error');
             inputPersonas.focus();
-            alert('El número máximo de personas por reserva es 200.');
+            alert('El número máximo de personas por reserva es 50.');
             return;
         }
 
