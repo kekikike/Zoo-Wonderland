@@ -1,21 +1,28 @@
 <?php
+// public/logout.php
 declare(strict_types=1);
 
 
-require_once __DIR__ . '/../vendor/autoload.php';
-session_start();
+// Iniciar sesión de forma segura (usando la misma función que recomendaremos)
+require_once __DIR__ . '/../core/session.php'; // o directamente la función
+use Core\Session;
+Session::iniciarSesionSegura();
 
-use App\Services\Auth;
-use App\Repositories\UsuarioRepository;  
+use App\Services\AuthService;
 
-$usuarioRepo = new UsuarioRepository();
-$auth = new Auth($usuarioRepo);
+$auth = new AuthService();
+$auth->logout();
 
-$auth->logout();           
-
+// Destrucción adicional por seguridad
 $_SESSION = [];
-session_unset();
+if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(session_name(), '', time() - 42000,
+        $params["path"], $params["domain"],
+        $params["secure"], $params["httponly"]
+    );
+}
 session_destroy();
 
-header('Location: index.php');
+header('Location: /');
 exit;

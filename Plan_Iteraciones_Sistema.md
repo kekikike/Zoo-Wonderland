@@ -38,14 +38,16 @@ incluyendo:
 - ver historial de compras
 
 # Iteracion II - Modulo Guia
-Duración: 4 dias
-Objetivo: Implementar la gestión de recorridos guiados.
+Duración: 7 dias
+Objetivo: Implementar el modulo de guia
 
 Incluye:
-- Registro de guías
-- Asignación de tours
-- Visualización de horarios
-- Reporte de recorridos realizados
+- Vista de recorridos
+- Vista de horarios
+- Registro de reportes
+- Administrador: CRUD de animales
+- Refactorizacion de las historias de usuario implementadas en el anterior iteracion
+- Uso de sesiones
 
 # Iteracion III - Modulo Adminsitrador
 Duración: -- dias

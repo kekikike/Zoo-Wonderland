@@ -29,6 +29,11 @@ class ComposerStaticInit45efdba36adaa374ad8bd423f6fbd95b
             'Dompdf\\' => 7,
             'DASPRiD\\Enum\\' => 13,
         ),
+        'C' =>
+        array (
+            'Core\\' => 5,
+            'Controllers\\' => 12,
+        ),
         'B' =>
         array (
             'BaconQrCode\\' => 12,
@@ -68,13 +73,21 @@ class ComposerStaticInit45efdba36adaa374ad8bd423f6fbd95b
         array (
             0 => __DIR__ . '/..' . '/dasprid/enum/src',
         ),
+        'Core\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/core',
+        ),
+        'Controllers\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/Controllers',
+        ),
         'BaconQrCode\\' =>
         array (
             0 => __DIR__ . '/..' . '/bacon/bacon-qr-code/src',
         ),
         'App\\' =>
         array (
-            0 => __DIR__ . '/../..' . '/src',
+            0 => __DIR__ . '/../..' . '/app',
         ),
     );
 

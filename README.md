@@ -18,48 +18,108 @@ Sistema desarrollado como proyecto del curso Tecnología Web II
 
 ## Estructura del Proyecto
 /
-├── config/
-|   └── constants.php
-├── public/
-|   ├── img/
-│   ├── index.php
-|   ├── comprar.php
-|   ├── historial.php
-|   ├── reservar.php
-|   ├── registrar.php 
-|   ├── logout.php
-│   └── login.php
-├── src/
-│   ├── enums/
+├── App/
+│   ├── constrollers/
+|   |   ├── AdminController.php
+|   |   ├── AnimalController.php
+|   |   ├── AreaController.php
+|   |   ├── AuthController.php
+|   |   ├── CompraController.php
+|   |   ├── GuiaController.php
+|   |   ├── HomeController.php
+|   |   ├── ReservaController.php
+|   |   ├── TicketController.php
+|   |   └── UsuarioController.php
 │   ├── models/
 |   |   ├── Administrador.php
 │   │   ├── animal.php
 │   │   ├── area.php
 |   |   ├── Cliente.php
-|   |   ├── Guia.php
 │   │   ├── compra.php
+|   |   ├── Guia.php
 |   |   ├── recorrido.php
+|   |   ├── Reporte.php
 |   |   ├── reserva.php
 |   |   ├── ticket.php
-│   │   └── usuario.php
-│   ├── Repositories/
+│   │   └── Usuario.php
+│   ├── repositories/
 │   │   ├── AnimalRepository.php
 |   |   ├── AreaRepository.php
 |   |   ├── CompraRepository.php
+|   |   ├── GuiaRepository.php
 |   |   ├── RecorridoRepository.php
+|   |   ├── ReporteRepository.php
 |   |   ├── ReservaRepository.php
 │   │   ├── TicketRepository.php
 │   │   └── UsuarioRepository.php
-│   ├── Services/
-│   │   |── Auth.php
-|   |   ├── autoload_session.php
-│   │   └── Register.php
-│   └── Utils/
+│   ├── services/
+│   │   |── AuthService.php
+|   |   ├── CompraService.php
+|   |   ├── RegisterService.php
+│   │   └── ReservaService.php
+│   ├── views/
+|   |   ├── admin/
+|   |   |   ├── animal_form.php
+|   |   |   ├── animales.php
+|   |   |   ├── dashboard.php
+|   |   |   └── recorridos.php
+|   |   ├── animales/
+|   |   ├── areas/
+|   |   ├── auth/
+|   |   |   ├── login.php
+|   |   |   ├── perfil.php
+|   |   |   └── register.php
+|   |   ├── compras/
+|   |   |   ├── crear.php
+|   |   |   ├── historial.php
+|   |   |   ├── listar.php
+|   |   |   └── login.php
+|   |   ├── errors/
+|   |   |   └── 403.php
+|   |   ├── guias/
+|   |   |   ├── partials/
+|   |   |   |   └── tabs.php
+|   |   |   ├── dashboard.php
+|   |   |   ├── detalle_recorrido.php
+|   |   |   ├── horarios.php
+|   |   |   ├── reporte_crear.php
+|   |   |   ├── reporte_historial.php
+|   |   |   └── reporte_seleccionar.php
+|   |   ├── reservas/
+|   |   |   ├── historial.php
+|   |   |   ├── listar.php
+|   |   |   ├── pagoqr.php
+|   |   |   └── reservar.php
+|   |   ├── tickets/
+|   |   ├── usuarios/
+|   |   |   └── historial.php
+|   |   └── home.php
+├── config/
+│   ├── constants.php
+│   └── Database.php
+├── core/
+│   ├── Authorization.php
+│   ├── config.php
+│   ├── Database.php
+│   ├── Logger.php
+│   └── session.php
+├── public/
+│   ├── img/
+│   ├── historial.php
+│   ├── index.php
+│   ├── logout.php
+│   ├── pagoqr_reserva.php
+│   └── reservar.php
+├── rutas/
+│   └── web.php
 ├── vendor/
 ├── .gitignore
+├── dbzoowonderland.sql
 ├── composer.json
 ├── composer.lock
-└── README.md
+├── Plan_Iteraciones_Sistema.md
+├── README.md
+└── US-13_IMPLEMENTACION.md
 
 ## Módulos
 
@@ -69,3 +129,16 @@ Sistema desarrollado como proyecto del curso Tecnología Web II
 ## Autor
 
 Antropomorfos - Tecnología Web II
+
+## Login
+admin
+Usuario: faviopzoo
+Contraseña: favio2026
+
+guia
+Usuario: charliep
+Contraseña: cha2026
+
+cliente
+Usuario: juancm
+Contraseña: 123
